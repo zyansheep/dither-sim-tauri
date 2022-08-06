@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.0.2",
+    "svelte-tabs": "^1.1.0",
     "vis-network": "^9.1.2"
   }
 }
