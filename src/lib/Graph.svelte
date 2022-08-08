@@ -1,25 +1,13 @@
-<script>
+<script lang="ts">
 	import { DataSet, Network } from "vis-network/standalone"
+	import type { Node, Edge } from "vis-network/standalone"
 	import { onMount } from 'svelte';
-	/* export let nodes: vis.DataSetNodes;
-	export let edges; */
-	var nodes = new DataSet([
-		{ id: 1, label: "Node 1" },
-		{ id: 2, label: "Node 2" },
-		{ id: 3, label: "Node 3" },
-		{ id: 4, label: "Node 4" },
-		{ id: 5, label: "Node 5" },
-	]);
 
-	// create an array with edges
-	var edges = [
-		{ from: 1, to: 3 },
-		{ from: 1, to: 2 },
-		{ from: 2, to: 4 },
-		{ from: 2, to: 5 },
-		{ from: 3, to: 3 },
-	];
+	// Attributes
+	export let nodes: Node[];
+	export let edges: Edge[];
 
+	// Network Element
 	let container;
 	
 	onMount(async () => {
@@ -27,17 +15,19 @@
 			nodes,
 			edges,
 		};
-		var options = {};
+		var options = {
+			physics: { enabled: false }
+		};
 		var network = new Network(container, data, options);
 	});
 </script>
 
 <style>
-	#mynetwork {
+	.graph {
 		border: 1px solid lightgray;
-		width: 100%;
-		height: 100%;
+		width: 99%;
+		height: 99%;
 	}
 </style>
 
-<div id="mynetwork" bind:this={container}></div>
+<div class="graph" bind:this={container}></div>
