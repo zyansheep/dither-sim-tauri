@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DataSet, Network } from "vis-network/standalone"
+	import { Network } from "vis-network/standalone"
 	import type { Node, Edge } from "vis-network/standalone"
 	import { onMount } from 'svelte';
 
@@ -9,25 +9,27 @@
 
 	// Network Element
 	let container;
-	
+	let network;
 	onMount(async () => {
-		var data = {
-			nodes,
-			edges,
-		};
-		var options = {
-			physics: { enabled: false }
-		};
-		var network = new Network(container, data, options);
+		if(network === undefined) {
+			var data = {
+				nodes,
+				edges,
+			};
+			var options = {
+				physics: { enabled: false }
+			};
+			network = new Network(container, data, options);
+		}
 	});
 </script>
 
 <style>
-	.graph {
+	#graph {
 		border: 1px solid lightgray;
 		width: 99%;
 		height: 99%;
 	}
 </style>
 
-<div class="graph" bind:this={container}></div>
+<div id="graph" bind:this={container}></div>
