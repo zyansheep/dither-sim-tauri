@@ -18,6 +18,8 @@
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
     "@tauri-apps/cli": "^1.0.5",
     "@tsconfig/svelte": "^3.0.0",
+    "d3": "^7.6.1",
+    "d3-zoom": "^3.0.0",
     "svelte": "^3.49.0",
     "svelte-check": "^2.8.0",
     "svelte-preprocess": "^4.10.7",
