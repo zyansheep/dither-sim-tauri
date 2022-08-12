@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { invoke } from "@tauri-apps/api/tauri";
-	import Graph from "./lib/Graph.svelte";
+	import Network from "./lib/Network.svelte";
 	import Tab, { Icon, Label } from "@smui/tab";
 	import { Svg } from "@smui/common/elements";
 	import TabBar from "@smui/tab-bar";
@@ -67,7 +67,7 @@
 	{#each slides as slide}
 		<div class:hidden={slide.id !== active.k}>
 			<p>Index: {slide.id}</p>
-			<Graph graph={slide} />
+			<Network graph={slide} />
 		</div>
 	{/each}
 </main>
