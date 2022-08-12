@@ -57,6 +57,7 @@
 			stacked={true}
 			indicatorSpanOnlyContent={true}
 			tabIndicator$transition="fade"
+			class="tab"
 		>
 			<Label>{tab.label}</Label>
 			<Icon component={Svg} viewBox="0 0 24 24">
@@ -76,6 +77,12 @@
 	main {
 		width: 100px;
 		height: 100px;
+	}
+	#tabbar {
+		margin: 20px;
+	}
+	.tab {
+		display: inline-block;
 	}
 	.hidden {
 		display: none;
