@@ -23,13 +23,11 @@
     "svelte": "^3.49.0",
     "svelte-check": "^2.8.0",
     "svelte-preprocess": "^4.10.7",
-    "svelte-slidy": "^2.8.7",
     "tslib": "^2.4.0",
     "typescript": "^4.6.4",
     "vite": "^3.0.0"
   },
   "dependencies": {
-    "@tauri-apps/api": "^1.0.2",
-    "vis-network": "^9.1.2"
+    "@tauri-apps/api": "^1.0.2"
   }
 }

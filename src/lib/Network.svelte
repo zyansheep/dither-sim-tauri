@@ -1,42 +1,55 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import * as d3 from 'd3';
 
-	export let graph;
+	type Edge<Id> = { source: Id, target: Id }
+	type Node<Id> = { id: Id, label: string, x: number, y: number }
+	type Graph<Id> = { nodes: Node<Id>[], edges: Edge<Id>[] }
+	export let graph : Graph<any>;
 
 	let svg;
-	let width = 500;
+	let width = 900;
 	let height = 600;
-    const nodeRadius = 5;
+    const nodeRadius = 8;
 
 	const padding = { top: 20, right: 40, bottom: 40, left: 25 };
 
-	$: edges = graph.edges.map(d => Object.create(d));
 	$: nodes = graph.nodes.map(d => Object.create(d));  
+
+	$: edges = graph.edges.map(d => Object.create(d));
 
 	const colourScale = d3.scaleOrdinal(d3.schemeCategory10);
 
 	let transform = d3.zoomIdentity;
     let simulation
 	onMount(() => {
+		console.log("Mounting:", graph.id);
+		simulation = d3.forceSimulation(nodes)
+			.on('tick', simulationUpdate);
 
-	simulation = d3.forceSimulation(nodes)
-		.force("link", d3.forceLink(edges).id(d => d.id))
-		.force("charge", d3.forceManyBody())
-		.force("center", d3.forceCenter(width / 2, height / 2))
-		.on('tick', simulationUpdate);
 
-	d3.select(svg)
-		.call(d3.drag()
-			.container(svg)
-			.subject(dragsubject)
-			.on("start", dragstarted)
-			.on("drag", dragged)
-			.on("end", dragended))
-		.call(d3.zoom()
-          .scaleExtent([1 / 10, 8])
-          .on('zoom', zoomed));
-	});
+		let node_map = Object.create(null);
+		
+		for (const node of nodes) {
+			node_map[node.id] = node;
+		}
+		for (const edge of edges) {
+			edge.target = node_map[edge.target];
+			edge.source = node_map[edge.source];
+		}
+		
+		d3.select(svg)
+			.call(d3.drag()
+				.container(svg)
+				.subject(dragsubject)
+				.on("start", dragstarted)
+				.on("drag", dragged)
+				.on("end", dragended))
+			.call(d3.zoom()
+			.scaleExtent([1 / 10, 8])
+			.on('zoom', zoomed));
+		}
+	);
 
 	function simulationUpdate () {
 		simulation.tick();
@@ -49,8 +62,9 @@
         simulationUpdate();
     }
 
-	function dragsubject(currentEvent) {
-        const node = simulation.find(transform.invertX(currentEvent.x), transform.invertY(currentEvent.y), nodeRadius);
+	function dragsubject(evt) {
+        const node_id = evt.sourceEvent.srcElement.dataset.id;
+		const node = nodes.find((elem) => elem.id == node_id);
         if (node) {
             node.x = transform.applyX(node.x);
             node.y = transform.applyY(node.y);
@@ -97,7 +111,7 @@
 	{/each}
 
 	{#each nodes as point}
-    <circle class='node' r='5' fill='{colourScale(point.group)}' cx='{point.x}' cy='{point.y}'
+    <circle class='node' r='5' fill='{colourScale(point.group)}' cx='{point.x}' cy='{point.y}' data-id='{point.id}'
      transform='translate({transform.x} {transform.y}) scale({transform.k} {transform.k})'>
     <title>{point.id}</title></circle>
 	{/each}
@@ -107,6 +121,7 @@
 <style>
 	svg {
 		float: left;
+		border: 1px solid lightgray;
 	}
 
 	circle {

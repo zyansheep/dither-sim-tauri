@@ -66,7 +66,7 @@
 		</Tab>
 	</TabBar>
 	{#each slides as slide}
-		<div class:hidden={slide.id !== active.k}>
+		<div class:hidden={slide.id !== active.k} class="slide">
 			<p>Index: {slide.id}</p>
 			<Network graph={slide} />
 		</div>
@@ -75,14 +75,16 @@
 
 <style>
 	main {
-		width: 100px;
-		height: 100px;
 	}
 	#tabbar {
 		margin: 20px;
 	}
 	.tab {
-		display: inline-block;
+		display: inline-block !important;
+	}
+	.slide {
+		width: 100%;
+		height: 80%;
 	}
 	.hidden {
 		display: none;
