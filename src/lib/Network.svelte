@@ -2,9 +2,10 @@
 	import { onMount } from 'svelte';
 	import * as d3 from 'd3';
 
-	type Edge<Id> = { source: Id, target: Id }
-	type Node<Id> = { id: Id, label: string, x: number, y: number }
-	type Graph<Id> = { nodes: Node<Id>[], edges: Edge<Id>[] }
+	type IdType = number | string | symbol;
+	type Edge<Id extends IdType> = { source: Id, target: Id }
+	type Node<Id extends IdType> = { id: Id, label: string, x: number, y: number }
+	type Graph<Id extends IdType> = { nodes: Node<Id>[], edges: Edge<Id>[], id_map: { [key in Id]: number }, id: number }
 	export let graph : Graph<any>;
 
 	let svg;
@@ -14,9 +15,9 @@
 
 	const padding = { top: 20, right: 40, bottom: 40, left: 25 };
 
-	$: nodes = graph.nodes.map(d => Object.create(d));  
+	$: nodes = graph.nodes.map(d => Object.create(d))
 
-	$: edges = graph.edges.map(d => Object.create(d));
+	$: edges = graph.edges.map(d => { return { ...d, source: nodes[graph.id_map[d.source]], target: nodes[graph.id_map[d.target]] } });
 
 	const colourScale = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -26,17 +27,6 @@
 		console.log("Mounting:", graph.id);
 		simulation = d3.forceSimulation(nodes)
 			.on('tick', simulationUpdate);
-
-
-		let node_map = Object.create(null);
-		
-		for (const node of nodes) {
-			node_map[node.id] = node;
-		}
-		for (const edge of edges) {
-			edge.target = node_map[edge.target];
-			edge.source = node_map[edge.source];
-		}
 		
 		d3.select(svg)
 			.call(d3.drag()
@@ -64,7 +54,7 @@
 
 	function dragsubject(evt) {
         const node_id = evt.sourceEvent.srcElement.dataset.id;
-		const node = nodes.find((elem) => elem.id == node_id);
+		const node = nodes[graph.id_map[Number(node_id)]]
         if (node) {
             node.x = transform.applyX(node.x);
             node.y = transform.applyY(node.y);
