@@ -11,7 +11,7 @@
 	let svg;
 	let width = 900;
 	let height = 600;
-    const nodeRadius = 8;
+    const nodeRadius = 40;
 
 	const padding = { top: 20, right: 40, bottom: 40, left: 25 };
 
@@ -91,7 +91,7 @@
 <!-- SVG was here -->
 <svg bind:this={svg} width='{width}' height='{height}'>
 	{#each edges as link}
-    <g stroke='#999' stroke-opacity='0.6'>
+    <g stroke='#999' stroke-opacity='5' stroke-width="5px">
       <line x1='{link.source.x}' y1='{link.source.y}' 
             x2='{link.target.x}' y2='{link.target.y}'
             transform='translate({transform.x} {transform.y}) scale({transform.k} {transform.k})'>
@@ -101,9 +101,12 @@
 	{/each}
 
 	{#each nodes as point}
-    <circle class='node' r='5' fill='{colourScale(point.group)}' cx='{point.x}' cy='{point.y}' data-id='{point.id}'
+    <circle class='node' r='{nodeRadius}' fill='{colourScale(point.group)}' cx='{point.x}' cy='{point.y}' data-id='{point.id}'
      transform='translate({transform.x} {transform.y}) scale({transform.k} {transform.k})'>
-    <title>{point.id}</title></circle>
+	</circle>
+
+	<text x='{point.x}' y='{point.y}' transform='translate({transform.x} {transform.y}) scale({transform.k} {transform.k})'>{point.id}</text>
+
 	{/each}
 
 </svg>
@@ -117,6 +120,10 @@
 	circle {
 		stroke: #fff;
     stroke-width: 1.5;
+	}
+	text {
+		text-align: center;
+		font-size: 20px;
 	}
 
 </style>

@@ -20,7 +20,7 @@ export let slides = [
 		]
 	},
 	{
-		id: 1,
+		id: 2,
 		nodes: [
 			{ id: 1, label: "1", x: 200, y: 100 },
 			{ id: 2, label: "2", x: -100, y: 400 },
